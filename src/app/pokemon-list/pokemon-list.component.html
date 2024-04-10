@@ -1,0 +1,7 @@
+<div *ngFor="let pokemon of pokemons">
+    <h3>{{ pokemon.nombre }}</h3>
+    <p>Tipo: {{ pokemon.tipo }}</p>
+    <img [src]="pokemon.imagen" alt="{{ pokemon.nombre }}">
+    <!-- Otros detalles del Pokémon -->
+  </div>
+  
