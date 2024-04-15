@@ -1,6 +1,19 @@
 <div *ngIf="currentPokemon; else noData">
-  <app-pokemon-card [pokemon]="currentPokemon"></app-pokemon-card>
+  <app-pokemon-card [pokemon]="currentPokemon" (onToggleCapture)="handleCapture($event)"></app-pokemon-card>
 </div>
-<button mat-button (click)="previousPage()" [disabled]="currentIndex === 0">Previous</button>
-<button mat-button (click)="nextPage()" [disabled]="currentIndex === pokemons.length - 1">Next</button>
+<div class="navigation-buttons">
+  <button mat-raised-button color="primary" (click)="previousPage()" [disabled]="currentIndex === 0">Previous</button>
+  <button mat-raised-button color="accent" (click)="nextPage()" [disabled]="currentIndex >= filteredPokemons.length - 1">Next</button>
+</div>
 <ng-template #noData><p>No Pokémon found.</p></ng-template>
+
+<div *ngIf="capturedPokemons.length > 0">
+  <h2>Captured Pokémons</h2>
+  <mat-list>
+    <mat-list-item *ngFor="let pokemon of capturedPokemons">
+      <img mat-list-avatar src="{{ pokemon.imagen }}" alt="{{ pokemon.nombre }}">
+      <div mat-line>{{ pokemon.nombre }}</div>
+      <div mat-line>{{ pokemon.tipo }}</div>
+    </mat-list-item>
+  </mat-list>
+</div>

@@ -1,12 +1,13 @@
 <mat-card class="pokemon-card">
     <mat-card-header>
-      <div mat-card-avatar class="pokemon-image" [style.background-image]="'url(' + pokemon.imagen + ')'"></div>
       <mat-card-title>{{ pokemon.nombre }}</mat-card-title>
       <mat-card-subtitle>{{ pokemon.tipo }}</mat-card-subtitle>
     </mat-card-header>
     <img mat-card-image [src]="pokemon.imagen" alt="Image of {{ pokemon.nombre }}">
     <mat-card-content>
-      <p>Capturado: {{ pokemon.estado_de_captura ? 'si' : 'No' }}</p>
+      <button mat-button (click)="toggleCapture()">
+        {{ pokemon.estado_de_captura === 'capturado' ? 'Liberar' : 'Capturar' }}
+      </button>
     </mat-card-content>
   </mat-card>
   

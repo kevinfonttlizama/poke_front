@@ -1,0 +1,20 @@
+.pokemon-card {
+    max-width: 300px;
+    margin: 20px auto;
+    display: block;
+  }
+  
+  .navigation-buttons, .mat-form-field {
+    text-align: center;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .mat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
