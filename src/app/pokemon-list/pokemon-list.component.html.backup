@@ -1,0 +1,18 @@
+<div class="search">
+  <input [(ngModel)]="searchName" placeholder="Search by name" />
+  <input [(ngModel)]="searchType" placeholder="Search by type" />
+  
+  <button (click)="searchPokemon()">Search</button>
+</div>
+
+<div *ngIf="pokemons.length; else noData">
+  <div *ngFor="let pokemon of pokemons">
+    <p>{{ pokemon.name }} ({{ pokemon.type.join(', ') }})</p>
+    <img [src]="pokemon.image" alt="Image of {{ pokemon.name }}">
+  </div>
+
+  <button (click)="previousPage()" [disabled]="currentPage <= 1">Previous</button>
+  <button (click)="nextPage()" [disabled]="currentPage >= totalPages">Next</button>
+</div>
+
+<ng-template #noData><p>No Pokémon found.</p></ng-template>

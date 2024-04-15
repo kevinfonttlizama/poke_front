@@ -1,3 +1,9 @@
-import { Routes } from '@angular/router';
+// src/app/app.routes.ts
+import { RouterModule, Routes } from '@angular/router';
+import { PokemonListComponent } from './pokemon-list/pokemon-list.component';
 
-export const routes: Routes = [];
+const routes: Routes = [
+  { path: 'list', component: PokemonListComponent, pathMatch: 'full' }
+];
+
+export const AppRoutesModule = RouterModule.forRoot(routes);

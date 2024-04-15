@@ -1,7 +1,7 @@
-<div *ngFor="let pokemon of pokemons">
-    <h3>{{ pokemon.nombre }}</h3>
-    <p>Tipo: {{ pokemon.tipo }}</p>
-    <img [src]="pokemon.imagen" alt="{{ pokemon.nombre }}">
-    <!-- Otros detalles del Pokémon -->
-  </div>
-  
+<!-- src/app/pokemon-list/pokemon-list.component.html -->
+<div *ngIf="pokemons && pokemons.length; else noData">
+  <app-pokemon-card *ngFor="let pokemon of pokemons" [pokemon]="pokemon"></app-pokemon-card>
+</div>
+<button (click)="previousPage()" [disabled]="currentPage === 1">Previous</button>
+<button (click)="nextPage()" [disabled]="currentPage >= totalPages">Next</button>
+<ng-template #noData><p>No Pokémon found.</p></ng-template>

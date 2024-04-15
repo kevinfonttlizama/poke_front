@@ -1,0 +1,12 @@
+<h1>pokemons</h1>
+
+<mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ pokemon.nombre }} ({{ pokemon.tipo }})</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image [src]="pokemon.imagen" alt="Image of {{ pokemon.nombre }}">
+    <mat-card-content>
+      <p>Captured: {{ pokemon.estado_de_captura ? 'Yes' : 'No' }}</p>
+    </mat-card-content>
+  </mat-card>
+  
