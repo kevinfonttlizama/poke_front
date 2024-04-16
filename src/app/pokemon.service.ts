@@ -15,12 +15,12 @@ export class PokemonService {
     return this.http.get<any>(`${this.apiUrl}`, { params });
   }
 
-  capturePokemon(pokemonId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/${pokemonId}/capture`, {});
+  capturePokemon(id: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${id}/capture`, {});
   }
 
-  releasePokemon(pokemonId: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${pokemonId}/release`);
+  releasePokemon(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}/release`);
   }
 
   importPokemons(): Observable<any> {

@@ -4,6 +4,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
 import { PokemonService } from '../pokemon.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
+import { CapturedPokemonDialogComponent } from '../captured-pokemon-dialog/captured-pokemon-dialog.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -12,7 +14,8 @@ import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
     CommonModule, 
     PokemonCardComponent, 
     MatButtonModule, 
-    MatListModule
+    MatListModule,
+    MatDialogModule
   ],
   templateUrl: './pokemon-list.component.html',
   styleUrls: ['./pokemon-list.component.css']
@@ -24,7 +27,9 @@ export class PokemonListComponent implements OnInit {
   filteredPokemons: any[] = [];
   capturedPokemons: any[] = [];
 
-  constructor(private pokemonService: PokemonService) {}
+  constructor(private pokemonService: PokemonService, public dialog: MatDialog
+    
+  ) {}
 
   ngOnInit(): void {
     this.loadPokemons();
@@ -34,7 +39,7 @@ export class PokemonListComponent implements OnInit {
     this.pokemonService.getPokemons({ page: 1 })
       .subscribe({
         next: (response) => {
-          this.pokemons = response || [];  // Make sure to handle an undefined or null response gracefully
+          this.pokemons = response || [];  
           this.filteredPokemons = [...this.pokemons];
           this.updateDisplay();
         },
@@ -53,21 +58,24 @@ export class PokemonListComponent implements OnInit {
   }
 
   handleCapture(pokemon: any): void {
-    const isCaptured = this.capturedPokemons.some(p => p.id === pokemon.id);
-    if (isCaptured) {
-      this.capturedPokemons = this.capturedPokemons.filter(p => p.id !== pokemon.id);
-      pokemon.estado_de_captura = 'no_capturado';
+    const foundIndex = this.capturedPokemons.findIndex(p => p.id === pokemon.id);
+    if (foundIndex !== -1) {
+      this.capturedPokemons.splice(foundIndex, 1);
     } else {
-      this.capturedPokemons.push({...pokemon, estado_de_captura: 'capturado'});
+      if (this.capturedPokemons.length < 6) {
+        this.capturedPokemons.push({...pokemon, estado_de_captura: 'capturado'}); 
+      } else {
+        alert('Maximum of 6 captured Pokémon at a time.');
+      }
     }
-    this.updatePokemonsList(pokemon);
+    this.updatePokemonsList(pokemon); 
   }
 
   updatePokemonsList(updatedPokemon: any): void {
     this.pokemons = this.pokemons.map(pokemon =>
       pokemon.id === updatedPokemon.id ? updatedPokemon : pokemon
     );
-    this.filteredPokemons = [...this.pokemons];  // Update filteredPokemons array to trigger view update
+    this.filteredPokemons = [...this.pokemons];  
   }
 
   updateDisplay(): void {
@@ -88,4 +96,17 @@ export class PokemonListComponent implements OnInit {
       this.currentPokemon = this.filteredPokemons[this.currentIndex];
     }
   }
+  showCapturedPokemons(): void {
+    this.dialog.open(CapturedPokemonDialogComponent, {
+      width: '250px',
+      data: { pokemons: this.capturedPokemons }
+    });
+  }
+openDialog(): void {
+  this.dialog.open(CapturedPokemonDialogComponent, {
+    width: '250px',
+    data: { pokemons: this.capturedPokemons }
+  });
+}
+
 }

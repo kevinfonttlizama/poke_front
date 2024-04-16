@@ -1,0 +1,7 @@
+<mat-list>
+    <mat-list-item *ngFor="let pokemon of data.pokemons">
+        <img mat-list-avatar src="{{ pokemon.imagen }}" alt="Image of {{ pokemon.nombre }}">
+        <div mat-line>{{ pokemon.nombre }}</div>
+        <div mat-line>{{ pokemon.tipo }}</div>
+    </mat-list-item>
+</mat-list>

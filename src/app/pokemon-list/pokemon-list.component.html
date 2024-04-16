@@ -9,13 +9,7 @@
 </div>
 <ng-template #noData><p>No se encontraron Pokémon.</p></ng-template>
 
-<div *ngIf="capturedPokemons.length > 0">
-  <h2>Pokémon Capturados</h2>
-  <mat-list>
-    <mat-list-item *ngFor="let pokemon of capturedPokemons">
-      <img mat-list-avatar src="{{ pokemon.imagen }}" alt="{{ pokemon.nombre }}">
-      <div mat-line>{{ pokemon.nombre }}</div>
-      <div mat-line>{{ pokemon.tipo }}</div>
-    </mat-list-item>
-  </mat-list>
-</div>
+
+<button mat-raised-button color="primary" (click)="openDialog()">Ver Pokémon Capturados</button>
+
+

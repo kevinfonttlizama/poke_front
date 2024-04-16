@@ -2,24 +2,33 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { PokemonService } from '../pokemon.service';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-pokemon-card',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule,MatListModule],
   templateUrl: './pokemon-card.component.html',
   styleUrls: ['./pokemon-card.component.css']
 })
 export class PokemonCardComponent {
   @Input() pokemon: any;
-  @Output() onCapture = new EventEmitter<any>();
-  @Output() onRelease = new EventEmitter<any>();
+  @Output() onToggleCapture = new EventEmitter<any>();
+
+  constructor(private pokemonService: PokemonService) {}
 
   toggleCapture(): void {
     if (this.pokemon.estado_de_captura === 'capturado') {
-      this.onRelease.emit(this.pokemon);
+      this.pokemonService.releasePokemon(this.pokemon.id).subscribe(() => {
+        this.pokemon.estado_de_captura = 'no_capturado';
+        this.onToggleCapture.emit(this.pokemon);
+      });
     } else {
-      this.onCapture.emit(this.pokemon);
+      this.pokemonService.capturePokemon(this.pokemon.id).subscribe(() => {
+        this.pokemon.estado_de_captura = 'capturado';
+        this.onToggleCapture.emit(this.pokemon);
+      });
     }
   }
 }
