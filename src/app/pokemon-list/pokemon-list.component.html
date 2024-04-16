@@ -1,14 +1,16 @@
+<button mat-raised-button color="primary" (click)="importPokemons()">Importar Pokémon</button>
+
 <div *ngIf="currentPokemon; else noData">
   <app-pokemon-card [pokemon]="currentPokemon" (onToggleCapture)="handleCapture($event)"></app-pokemon-card>
 </div>
 <div class="navigation-buttons">
-  <button mat-raised-button color="primary" (click)="previousPage()" [disabled]="currentIndex === 0">Previous</button>
-  <button mat-raised-button color="accent" (click)="nextPage()" [disabled]="currentIndex >= filteredPokemons.length - 1">Next</button>
+  <button mat-raised-button color="primary" (click)="previousPage()" [disabled]="currentIndex === 0">Anterior</button>
+  <button mat-raised-button color="accent" (click)="nextPage()" [disabled]="currentIndex >= filteredPokemons.length - 1">Siguiente</button>
 </div>
-<ng-template #noData><p>No Pokémon found.</p></ng-template>
+<ng-template #noData><p>No se encontraron Pokémon.</p></ng-template>
 
 <div *ngIf="capturedPokemons.length > 0">
-  <h2>Captured Pokémons</h2>
+  <h2>Pokémon Capturados</h2>
   <mat-list>
     <mat-list-item *ngFor="let pokemon of capturedPokemons">
       <img mat-list-avatar src="{{ pokemon.imagen }}" alt="{{ pokemon.nombre }}">

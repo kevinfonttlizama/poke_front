@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
 import { MatListModule } from '@angular/material/list';
-import { FormsModule } from '@angular/forms';
 import { PokemonService } from '../pokemon.service';
 import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
 
@@ -16,9 +12,7 @@ import { PokemonCardComponent } from '../pokemon-card/pokemon-card.component';
     CommonModule, 
     PokemonCardComponent, 
     MatButtonModule, 
-    MatListModule, 
-    FormsModule,
-    MatInputModule
+    MatListModule
   ],
   templateUrl: './pokemon-list.component.html',
   styleUrls: ['./pokemon-list.component.css']
@@ -29,7 +23,7 @@ export class PokemonListComponent implements OnInit {
   pokemons: any[] = [];
   filteredPokemons: any[] = [];
   capturedPokemons: any[] = [];
-  
+
   constructor(private pokemonService: PokemonService) {}
 
   ngOnInit(): void {
@@ -40,7 +34,7 @@ export class PokemonListComponent implements OnInit {
     this.pokemonService.getPokemons({ page: 1 })
       .subscribe({
         next: (response) => {
-          this.pokemons = response.pokemons || [];
+          this.pokemons = response || [];  // Make sure to handle an undefined or null response gracefully
           this.filteredPokemons = [...this.pokemons];
           this.updateDisplay();
         },
@@ -48,32 +42,37 @@ export class PokemonListComponent implements OnInit {
       });
   }
 
+  importPokemons(): void {
+    this.pokemonService.importPokemons().subscribe({
+      next: () => {
+        console.log('Pokémon imported successfully');
+        this.loadPokemons();  // Reload pokemons after importing
+      },
+      error: (error) => console.error('Error importing Pokémon', error)
+    });
+  }
+
   handleCapture(pokemon: any): void {
-    const isCaptured = this.capturedPokemons.find(p => p.id === pokemon.id);
+    const isCaptured = this.capturedPokemons.some(p => p.id === pokemon.id);
     if (isCaptured) {
       this.capturedPokemons = this.capturedPokemons.filter(p => p.id !== pokemon.id);
-      pokemon.estado_de_captura = false;
+      pokemon.estado_de_captura = 'no_capturado';
     } else {
-      if (this.capturedPokemons.length < 6) {
-        this.capturedPokemons.push(pokemon);
-        pokemon.estado_de_captura = true;
-      } else {
-        this.capturedPokemons[0].estado_de_captura = false;
-        this.capturedPokemons.shift();
-        this.capturedPokemons.push(pokemon);
-        pokemon.estado_de_captura = true;
-      }
+      this.capturedPokemons.push({...pokemon, estado_de_captura: 'capturado'});
     }
+    this.updatePokemonsList(pokemon);
+  }
+
+  updatePokemonsList(updatedPokemon: any): void {
+    this.pokemons = this.pokemons.map(pokemon =>
+      pokemon.id === updatedPokemon.id ? updatedPokemon : pokemon
+    );
+    this.filteredPokemons = [...this.pokemons];  // Update filteredPokemons array to trigger view update
   }
 
   updateDisplay(): void {
-    if (this.filteredPokemons.length > 0) {
-      this.currentPokemon = this.filteredPokemons[0];
-      this.currentIndex = 0;
-    } else {
-      this.currentPokemon = null;
-      this.currentIndex = -1;
-    }
+    this.currentPokemon = this.filteredPokemons.length > 0 ? this.filteredPokemons[0] : null;
+    this.currentIndex = 0;
   }
 
   nextPage(): void {
